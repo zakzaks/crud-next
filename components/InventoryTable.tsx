@@ -12,6 +12,7 @@ import {
 import { Input } from "./ui/input";
 import { Search } from "lucide-react";
 import { Combobox } from "./ui/combo-box";
+import { useState } from "react";
 
 const plants = [
 	{
@@ -23,11 +24,17 @@ const plants = [
 ];
 
 export default function InventoryTable() {
+	const [searchTerm, setSearchTerm] = useState("");
 	return (
 		<div className="w-full">
 			<div className="flex items-center gap-2 py-4">
 				<div className="relative max-w--sm w-full">
-					<Input placeholder="Filter plants..." className="pl-10" />
+					<Input
+						value={searchTerm}
+						onChange={(e) => setSearchTerm(e.target.value)}
+						placeholder="Filter plants..."
+						className="pl-10"
+					/>
 					<Search className="absolute h-4 w-4 left-3 top-1/2 transform -translate-y-1/2" />
 				</div>
 				<Combobox />
