@@ -15,15 +15,6 @@ import { Combobox } from "./ui/combo-box";
 import { useState } from "react";
 import { getPlants } from "@/actions/plant.action";
 
-const plants = [
-	{
-		id: "PL001",
-		name: "Fiddle Leaf Fig",
-		category: "Indoor",
-		price: "$150.00",
-	},
-];
-
 type Plant = Awaited<ReturnType<typeof getPlants>>;
 interface InventoryTableProps {
 	plants: Plant;

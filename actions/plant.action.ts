@@ -1,10 +1,11 @@
 import { prisma } from "@/lib/prisma";
 import { getUserId } from "./user.action";
+import type { Prisma } from "@/lib/generated/prisma";
 
 export async function getPlants(searchTerm?: string) {
 	try {
 		const currentUserId = await getUserId();
-		const whereClause: any = { userId: currentUserId };
+		const whereClause: Prisma.PlantsWhereInput = { userId: currentUserId };
 
 		if (searchTerm) {
 			whereClause.name = { contains: searchTerm, mode: "insensitive" };
