@@ -1,25 +1,23 @@
 import { prisma } from "@/lib/prisma";
 import { getUserId } from "./user.action";
-import { revalidatePath } from "next/cache";
 
 export async function getPlants(searchTerm?: string) {
 	try {
 		const currentUserId = await getUserId();
-		const whereClause: any = { user_id: currentUserId };
+		const whereClause: any = { userId: currentUserId };
 
 		if (searchTerm) {
 			whereClause.name = { contains: searchTerm, mode: "insensitive" };
 		}
 
-		const userPlants = await prisma.plant.findMany({
+		const userPlants = await prisma.plants.findMany({
 			where: whereClause,
-			orderBy: { created_at: "desc" },
+			orderBy: { createdAt: "desc" },
 		});
 
-		revalidatePath("/");
 		return { success: true, userPlants };
 	} catch (error) {
-		console.error("Error fetching plants:", error);
+		console.error("Error in get plants:", error);
 		throw new Error("Failed to fetch plants");
 	}
 }

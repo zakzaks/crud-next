@@ -13,6 +13,7 @@ import { Input } from "./ui/input";
 import { Search } from "lucide-react";
 import { Combobox } from "./ui/combo-box";
 import { useState } from "react";
+import { getPlants } from "@/actions/plant.action";
 
 const plants = [
 	{
@@ -23,8 +24,22 @@ const plants = [
 	},
 ];
 
-export default function InventoryTable() {
+type Plant = Awaited<ReturnType<typeof getPlants>>;
+interface InventoryTableProps {
+	plants: Plant;
+}
+
+export default function InventoryTable({ plants }: InventoryTableProps) {
+	const [selectedCategory, setSelectedCategory] = useState("");
 	const [searchTerm, setSearchTerm] = useState("");
+
+	// Filter plants by name and category ( if selected )
+	const filteredPlants = plants?.userPlants?.filter(
+		(plant) =>
+			plant.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+			(selectedCategory === "" || plant.category === selectedCategory)
+	);
+
 	return (
 		<div className="w-full">
 			<div className="flex items-center gap-2 py-4">
@@ -52,13 +67,13 @@ export default function InventoryTable() {
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{plants.map((plant) => (
-						<TableRow key={plant.id}>
-							<TableCell className="font-medium">{plant.id}</TableCell>
-							<TableCell>{plant.name}</TableCell>
-							<TableCell>{plant.category}</TableCell>
+					{filteredPlants.map((plants) => (
+						<TableRow key={plants.id}>
+							<TableCell className="font-medium">{plants.id}</TableCell>
+							<TableCell>{plants.name}</TableCell>
+							<TableCell>{plants.category}</TableCell>
 							<TableCell className="text-right font-bold">
-								{plant.price}
+								{plants.price}
 							</TableCell>
 							<TableCell className="space-x-2">
 								<button className="text-blue-500 hover:underline">Edit</button>

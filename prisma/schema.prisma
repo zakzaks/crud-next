@@ -14,15 +14,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Plant{
+model Plants{
   id String @id @default(cuid())
   name String
   description String?
   category String
   stock Int
   price Float
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
   userId String
   imageUrl String?
 }
