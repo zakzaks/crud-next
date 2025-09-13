@@ -43,7 +43,10 @@ export default function InventoryTable({ plants }: InventoryTableProps) {
 					/>
 					<Search className="absolute h-4 w-4 left-3 top-1/2 transform -translate-y-1/2" />
 				</div>
-				<Combobox />
+				<Combobox
+					value={selectedCategory}
+					onChange={(value) => setSelectedCategory(value)}
+				/>
 			</div>
 
 			<Table>
