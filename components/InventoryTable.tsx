@@ -14,6 +14,8 @@ import { Search } from "lucide-react";
 import { Combobox } from "./ui/combo-box";
 import { useState } from "react";
 import { getPlants } from "@/actions/plant.action";
+import { useRouter } from "next/navigation";
+import { Skeleton } from "./ui/skeleton";
 
 type Plant = Awaited<ReturnType<typeof getPlants>>;
 interface InventoryTableProps {
@@ -24,6 +26,8 @@ export default function InventoryTable({ plants }: InventoryTableProps) {
 	const [selectedCategory, setSelectedCategory] = useState("");
 	const [searchTerm, setSearchTerm] = useState("");
 
+	const router = useRouter();
+
 	// Filter plants by name and category ( if selected )
 	const filteredPlants = plants?.userPlants?.filter(
 		(plant) =>
@@ -31,10 +35,70 @@ export default function InventoryTable({ plants }: InventoryTableProps) {
 			(selectedCategory === "" || plant.category === selectedCategory)
 	);
 
+	if (!plants) {
+		return (
+			<div className="w-full space-y-4">
+				<div className="flex items-center gap-2 py-4">
+					<Skeleton className="h-10 w-full max-w-sm" />
+					<Skeleton className="h-10 w-32" />
+					<Skeleton className="h-10 w-32" />
+				</div>
+				<Table>
+					<TableHeader>
+						<TableRow>
+							<TableHead>
+								<Skeleton className="w-full h-4" />
+							</TableHead>
+							<TableHead>
+								<Skeleton className="w-full h-4" />
+							</TableHead>
+							<TableHead>
+								<Skeleton className="w-full h-4" />
+							</TableHead>
+							<TableHead>
+								<Skeleton className="w-full h-4" />
+							</TableHead>
+							<TableHead>
+								<Skeleton className="w-full h-4" />
+							</TableHead>
+							<TableHead className="text-right">
+								<Skeleton className="w-full h-4" />
+							</TableHead>
+						</TableRow>
+					</TableHeader>
+					<TableBody>
+						{Array.from({ length: 5 }).map((_, i) => (
+							<TableRow key={i}>
+								<TableCell>
+									<Skeleton className="w-full h-4" />
+								</TableCell>
+								<TableCell>
+									<Skeleton className="w-full h-4" />
+								</TableCell>
+								<TableCell>
+									<Skeleton className="w-full h-4" />
+								</TableCell>
+								<TableCell>
+									<Skeleton className="w-full h-4" />
+								</TableCell>
+								<TableCell>
+									<Skeleton className="w-full h-4" />
+								</TableCell>
+								<TableCell className="text-right">
+									<Skeleton className="w-full h-4" />
+								</TableCell>
+							</TableRow>
+						))}
+					</TableBody>
+				</Table>
+			</div>
+		);
+	}
+
 	return (
 		<div className="w-full">
 			<div className="flex items-center gap-2 py-4">
-				<div className="relative max-w--sm w-full">
+				<div className="relative max-w-sm w-full">
 					<Input
 						value={searchTerm}
 						onChange={(e) => setSearchTerm(e.target.value)}
@@ -47,6 +111,7 @@ export default function InventoryTable({ plants }: InventoryTableProps) {
 					value={selectedCategory}
 					onChange={(value) => setSelectedCategory(value)}
 				/>
+				<h1>Create Button</h1>
 			</div>
 
 			<Table>
@@ -61,22 +126,32 @@ export default function InventoryTable({ plants }: InventoryTableProps) {
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{filteredPlants.map((plants) => (
-						<TableRow key={plants.id}>
-							<TableCell className="font-medium">{plants.id}</TableCell>
-							<TableCell>{plants.name}</TableCell>
-							<TableCell>{plants.category}</TableCell>
-							<TableCell className="text-right font-bold">
-								{plants.price}
-							</TableCell>
-							<TableCell className="space-x-2">
-								<button className="text-blue-500 hover:underline">Edit</button>
-								<button className="text-blue-500 hover:underline">
-									Delete
-								</button>
-							</TableCell>
-						</TableRow>
-					))}
+					{filteredPlants.map((plants) => {
+						const slugifiedName = plants.name
+							.toLowerCase()
+							.replace(/\s+/g, "-");
+						const slug = `${plants.id}--${slugifiedName}`;
+						const plantUrl = `/plants/${slug}`;
+
+						return (
+							<TableRow key={plants.id} onClick={() => router.push(plantUrl)}>
+								<TableCell className="font-medium">{plants.id}</TableCell>
+								<TableCell>{plants.name}</TableCell>
+								<TableCell>{plants.category}</TableCell>
+								<TableCell className="text-right font-bold">
+									{plants.price}
+								</TableCell>
+								<TableCell className="space-x-2">
+									<button className="text-blue-500 hover:underline">
+										Edit
+									</button>
+									<button className="text-blue-500 hover:underline">
+										Delete
+									</button>
+								</TableCell>
+							</TableRow>
+						);
+					})}
 				</TableBody>
 			</Table>
 		</div>
