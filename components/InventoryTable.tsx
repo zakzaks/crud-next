@@ -16,6 +16,9 @@ import { useState } from "react";
 import { getPlants } from "@/actions/plant.action";
 import { useRouter } from "next/navigation";
 import { Skeleton } from "./ui/skeleton";
+import CreateDialog from "./CreateDialog";
+import EditDialog from "./EditDialog";
+import DeleteDialog from "./DeleteDialog";
 
 type Plant = Awaited<ReturnType<typeof getPlants>>;
 interface InventoryTableProps {
@@ -111,7 +114,7 @@ export default function InventoryTable({ plants }: InventoryTableProps) {
 					value={selectedCategory}
 					onChange={(value) => setSelectedCategory(value)}
 				/>
-				<h1>Create Button</h1>
+				<CreateDialog />
 			</div>
 
 			<Table>
@@ -122,7 +125,7 @@ export default function InventoryTable({ plants }: InventoryTableProps) {
 						<TableHead>Name</TableHead>
 						<TableHead>Category</TableHead>
 						<TableHead className="text-right">Price</TableHead>
-						<TableHead>Actions</TableHead>
+						<TableHead className="text-right">Actions</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
@@ -141,13 +144,28 @@ export default function InventoryTable({ plants }: InventoryTableProps) {
 								<TableCell className="text-right font-bold">
 									{plants.price}
 								</TableCell>
-								<TableCell className="space-x-2">
-									<button className="text-blue-500 hover:underline">
-										Edit
-									</button>
-									<button className="text-blue-500 hover:underline">
-										Delete
-									</button>
+								<TableCell className="text-right">
+									<div
+										className="flex justify-end items-center gap-2"
+										onClick={(e) => e.stopPropagation()}
+									>
+										{/* Edit Button with Tooltip */}
+										<div className="group relative hover:cursor-pointer">
+											<EditDialog plant={plants} />
+											<span className="absolute -top-8 left-1/2 -translate-x-1/2 scale-0 group-hover:scale-100 transition bg-gray-800 text-white text-xs rounded px-2 py-1 pointer-events-none z-10">
+												Edit
+											</span>
+										</div>
+										{/* Divider */}
+										<span className="h-5 w-px bg-gray-300 mx-1" />
+										{/* Delete Button with Tooltip */}
+										<div className="group relative hover:cursor-pointer">
+											<DeleteDialog plant={plants} />
+											<span className="absolute -top-8 left-1/2 -translate-x-1/2 scale-0 group-hover:scale-100 transition bg-gray-800 text-white text-xs rounded px-2 py-1 pointer-events-none z-10">
+												Delete
+											</span>
+										</div>
+									</div>
 								</TableCell>
 							</TableRow>
 						);
