@@ -36,6 +36,7 @@ export async function createPlant(data: Prisma.PlantsCreateInput) {
 	try {
 		const currentUserId = await getUserId();
 		if (!currentUserId) return;
+		console.log("Creating plant with data:", data);
 
 		const newPlant = await prisma.plants.create({
 			data: {

@@ -20,6 +20,7 @@ export default function PlantCard({ plant }: PlantCardProps) {
 	if (!plant) {
 		return <div>Plant data is not available.</div>;
 	}
+	console.log("Plant data:", plant);
 
 	return (
 		<Card className="max-w">
@@ -27,14 +28,12 @@ export default function PlantCard({ plant }: PlantCardProps) {
 				<div className="basis-2/4">
 					<CardHeader>
 						{plant.imageUrl && (
-							<div className="rounded-lg overflow-hidden">
+							<div className="rounded-lg overflow-hidden flex justify-center items-center">
 								<Image
 									src={plant.imageUrl}
 									alt="Post content"
-									className="w-full h-auto object-cover"
-									width={600} // Set appropriate width
-									height={400} // Set appropriate height
-									sizes="(max-width: 768px) 100vw, 50vw"
+									width={320} // Set appropriate width
+									height={320} // Set appropriate height
 									priority
 								/>
 							</div>

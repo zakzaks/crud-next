@@ -18,6 +18,7 @@ import { Combobox } from "./ui/combo-box";
 import { Textarea } from "./ui/textarea";
 import { createPlant } from "@/actions/plant.action";
 import toast from "react-hot-toast";
+import ImageUpload from "@/components/ImageUpload";
 
 function CreateDialog() {
 	const [formData, setFormData] = useState({
@@ -72,7 +73,7 @@ function CreateDialog() {
 
 					<form
 						onSubmit={handleSubmit}
-						className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 space-y-6"
+						className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 space-y-8"
 					>
 						<div>
 							<h3 className="text-lg font-semibold mb-2">Plant Details</h3>
@@ -90,10 +91,12 @@ function CreateDialog() {
 								</div>
 								<div>
 									<Label htmlFor="category">Category</Label>
-									<Combobox
-										value={formData.category}
-										onChange={(val) => handleChange("category", val)}
-									/>
+									<div className="mt-1">
+										<Combobox
+											value={formData.category}
+											onChange={(val) => handleChange("category", val)}
+										/>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -145,22 +148,23 @@ function CreateDialog() {
 							</div>
 						</div>
 
-						{/* Uncomment and style if you want image upload */}
-						{/* <div>
-        <Label>Image</Label>
-        <ImageUpload
-            endpoint="postImage"
-            value={formData.imageUrl}
-            onChange={(url) => handleChange("imageUrl", url)}
-        />
-    </div> */}
+						<div>
+							<h3 className="text-lg font-semibold mb-2">Image</h3>
+							<div className="flex flex-col items-start gap-2">
+								<ImageUpload
+									endpoint="postImage"
+									value={formData.imageUrl}
+									onChange={(url) => handleChange("imageUrl", url)}
+								/>
+							</div>
+						</div>
 
 						<AlertDialogFooter className="flex flex-row justify-end gap-2 pt-4">
 							<AlertDialogCancel className="w-28 hover:cursor-pointer">
 								Cancel
 							</AlertDialogCancel>
 							<AlertDialogAction
-								className=" hover:cursor-pointer"
+								className="w-28 hover:cursor-pointer"
 								type="submit"
 							>
 								Save Changes
